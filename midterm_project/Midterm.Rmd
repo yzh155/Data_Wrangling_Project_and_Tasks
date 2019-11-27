@@ -1,0 +1,141 @@
+---
+title: "Midterm"
+output:
+  html_document: default
+  pdf_document: default
+---
+First, we need to read the XPT file into R,
+```{r setup, include=FALSE}
+library(Hmisc)
+library(SASxport)
+DIQ <- sasxport.get("C:/Users/f003mxk/Desktop/Qbs_181/Midterm/DIQ_I.XPT")
+```
+library(Hmisc)
+library(SASxport)
+DIQ <- sasxport.get("C:/Users/f003mxk/Desktop/Qbs_181/Midterm/DIQ_I.XPT")
+
+To check the data type of each column, 
+```{r}
+sapply(DIQ, class)
+```
+All the variables are in the type of integer, which is good. 
+
+Next, I will delete all respondents who doesn’t have diabetes, doesn’t have prediabetes, is not at risk for diabetes and doesn’t feel could be at risk for diabetes, because all the other questions will be skipped for them and all their answers to other questions will be missing values and will not provide any insight to a diabetes research. 
+
+I will drop these respondents by creating a subset of the dataframe:
+```{r}
+library(sqldf)
+DIQ[] <- lapply(DIQ, as.numeric)
+DIQ_S <- sqldf("SELECT * FROM DIQ WHERE diq010!=2 OR diq160!=2 OR diq170!=2 OR diq172!=2")
+```
+
+Next, I will recode all diq175 variables to dummy variables. If the variable is a missing value, I will recode it to 0, and if the variable is not, I will recode it to 1. 
+```{r}
+DIQ_S$diq175a[is.na(DIQ_S$diq175a)] <- 0
+DIQ_S$diq175a[which(DIQ_S$diq175a!=0)] <- 1
+DIQ_S$diq175b[is.na(DIQ_S$diq175b)] <- 0
+DIQ_S$diq175b[which(DIQ_S$diq175b!=0)] <- 1
+DIQ_S$diq175c[is.na(DIQ_S$diq175c)] <- 0
+DIQ_S$diq175c[which(DIQ_S$diq175c!=0)] <- 1
+DIQ_S$diq175d[is.na(DIQ_S$diq175d)] <- 0
+DIQ_S$diq175d[which(DIQ_S$diq175d!=0)] <- 1
+DIQ_S$diq175e[is.na(DIQ_S$diq175e)] <- 0
+DIQ_S$diq175e[which(DIQ_S$diq175e!=0)] <- 1
+DIQ_S$diq175f[is.na(DIQ_S$diq175f)] <- 0
+DIQ_S$diq175f[which(DIQ_S$diq175f!=0)] <- 1
+DIQ_S$diq175g[is.na(DIQ_S$diq175g)] <- 0
+DIQ_S$diq175g[which(DIQ_S$diq175g!=0)] <- 1
+DIQ_S$diq175h[is.na(DIQ_S$diq175h)] <- 0
+DIQ_S$diq175h[which(DIQ_S$diq175h!=0)] <- 1
+DIQ_S$diq175i[is.na(DIQ_S$diq175i)] <- 0
+DIQ_S$diq175i[which(DIQ_S$diq175i!=0)] <- 1
+DIQ_S$diq175j[is.na(DIQ_S$diq175j)] <- 0
+DIQ_S$diq175j[which(DIQ_S$diq175j!=0)] <- 1
+DIQ_S$diq175k[is.na(DIQ_S$diq175k)] <- 0
+DIQ_S$diq175k[which(DIQ_S$diq175k!=0)] <- 1
+DIQ_S$diq175l[is.na(DIQ_S$diq175l)] <- 0
+DIQ_S$diq175l[which(DIQ_S$diq175l!=0)] <- 1
+DIQ_S$diq175m[is.na(DIQ_S$diq175m)] <- 0
+DIQ_S$diq175m[which(DIQ_S$diq175m!=0)] <- 1
+DIQ_S$diq175n[is.na(DIQ_S$diq175n)] <- 0
+DIQ_S$diq175n[which(DIQ_S$diq175n!=0)] <- 1
+DIQ_S$diq175o[is.na(DIQ_S$diq175o)] <- 0
+DIQ_S$diq175o[which(DIQ_S$diq175o!=0)] <- 1
+DIQ_S$diq175p[is.na(DIQ_S$diq175p)] <- 0
+DIQ_S$diq175p[which(DIQ_S$diq175p!=0)] <- 1
+DIQ_S$diq175q[is.na(DIQ_S$diq175q)] <- 0
+DIQ_S$diq175q[which(DIQ_S$diq175q!=0)] <- 1
+DIQ_S$diq175r[is.na(DIQ_S$diq175r)] <- 0
+DIQ_S$diq175r[which(DIQ_S$diq175r!=0)] <- 1
+DIQ_S$diq175s[is.na(DIQ_S$diq175s)] <- 0
+DIQ_S$diq175s[which(DIQ_S$diq175s!=0)] <- 1
+DIQ_S$diq175t[is.na(DIQ_S$diq175t)] <- 0
+DIQ_S$diq175t[which(DIQ_S$diq175t!=0)] <- 1
+DIQ_S$diq175u[is.na(DIQ_S$diq175u)] <- 0
+DIQ_S$diq175u[which(DIQ_S$diq175u!=0)] <- 1
+DIQ_S$diq175v[is.na(DIQ_S$diq175v)] <- 0
+DIQ_S$diq175v[which(DIQ_S$diq175v!=0)] <- 1
+DIQ_S$diq175w[is.na(DIQ_S$diq175w)] <- 0
+DIQ_S$diq175w[which(DIQ_S$diq175w!=0)] <- 1
+DIQ_S$diq175x[is.na(DIQ_S$diq175x)] <- 0
+DIQ_S$diq175x[which(DIQ_S$diq175x!=0)] <- 1
+```
+
+For all categorical variables (those that are not continuous), I will convert the missing varaibles to 0. 
+```{r}
+DIQ_S$diq010[is.na(DIQ_S$diq010)] <- 0
+DIQ_S$diq160[is.na(DIQ_S$diq160)] <- 0
+DIQ_S$diq170[is.na(DIQ_S$diq170)] <- 0
+DIQ_S$diq172[is.na(DIQ_S$diq172)] <- 0
+DIQ_S$diq180[is.na(DIQ_S$diq180)] <- 0
+DIQ_S$diq050[is.na(DIQ_S$diq050)] <- 0
+DIQ_S$diq070[is.na(DIQ_S$diq070)] <- 0
+DIQ_S$diq230[is.na(DIQ_S$diq230)] <- 0
+DIQ_S$diq240[is.na(DIQ_S$diq240)] <- 0
+DIQ_S$diq275[is.na(DIQ_S$diq275)] <- 0
+DIQ_S$diq291[is.na(DIQ_S$diq291)] <- 0
+DIQ_S$diq360[is.na(DIQ_S$diq360)] <- 0
+DIQ_S$diq080[is.na(DIQ_S$diq080)] <- 0
+```
+
+For continous variables, I have to deal with each variable case by case. DID040 is a variable for age, so I cannot simply change the missing values to 0 and have to impute the missing values either by mean and median. I have to plot it first to see the distribution to see which one to use. 
+```{r}
+hist(DIQ_S$did040[which(DIQ_S$did040<100)], breaks=50, col="purple")
+```
+
+The distribution is slightly skewed toward the left so I will impute the median. For this question, respondonts who anserwed "don't know" were labeled 999 and respondents who answered "less than 1" were labeled 666. Since this is a contiuous variable, Having 999s and 666s will lead to great variance and they also need to be imputed
+```{r}
+DIQ_S$did040[is.na(DIQ_S$did040)] <- median(DIQ_S$did040, na.rm = TRUE)
+DIQ_S$did040[which(DIQ_S$did040==999)] <- median(DIQ_S$did040, na.rm = TRUE)
+DIQ_S$did040[which(DIQ_S$did040==666)] <- median(DIQ_S$did040, na.rm = TRUE)
+```
+
+For DID160, DIQ260, DID350, before imputing values, I will first create a set of new variables in the unit of days to make these variables continuous. Before they were not continuous because the values were of different units. 
+```{r}
+
+DIQ_S$did060n <- ifelse(DIQ_S$diq060u==1, DIQ_S$did060*30, ifelse(DIQ_S$diq060u==2, DIQ_S$did060*365, NA))
+
+DIQ_S$diq260n <- ifelse(DIQ_S$diq260u==1, DIQ_S$did260, ifelse(DIQ_S$diq260u==2, DIQ_S$did260*7, ifelse(DIQ_S$diq260u==3, DIQ_S$did260*30, ifelse(DIQ_S$diq260u==4, DIQ_S$did260*365, NA))))
+
+DIQ_S$did350n <- ifelse(DIQ_S$diq350u==1, DIQ_S$did350, ifelse(DIQ_S$diq350u==2, DIQ_S$did350*7, ifelse(DIQ_S$diq350u==3, DIQ_S$did350*30, ifelse(DIQ_S$diq350u==4, DIQ_S$did350*365, NA))))
+
+```
+
+For DID060n, since the question is asking how long the respondent has been taking insulin, if the question was skipped for the respondent, it means the respondent is not taking insulin, so they have been taking insulin for 0 day. I can impute the missing vaues with 0. 
+```{r}
+DIQ_S$did060n[is.na(DIQ_S$did060n)] <- 0
+```
+
+For other variables after DIQ050, since if the respondent answered "NO" to DIQ050, the interview will end and all other questions after it will not be asked and labeled as missing values. I will leave the missing values as they are now. If the a research is going to be done on insulin specifically in the future, these respondents who answered "No" to DIQ050 can be deleted as they don't provide any insight to the study. 
+
+To verify the count of each variable, the easiest way is to use the count() function in SQL:
+```{r}
+sqldf("SELECT DIQ010, COUNT(*) FROM DIQ GROUP BY DIQ010") 
+sqldf("SELECT DID040, COUNT(*) FROM DIQ GROUP BY DID040") 
+sqldf("SELECT DIQ160, COUNT(*) FROM DIQ GROUP BY DIQ160")
+sqldf("SELECT DIQ170, COUNT(*) FROM DIQ GROUP BY DIQ170")
+sqldf("SELECT DIQ172, COUNT(*) FROM DIQ GROUP BY DIQ172")
+```
+Repeat this code for each column to check if they agree with the code book. 
+
+
